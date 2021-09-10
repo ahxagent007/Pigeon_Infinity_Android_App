@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "372549357871",
+    "project_id": "pigeon-infinity",
+    "storage_bucket": "pigeon-infinity.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:372549357871:android:2ae9a5082281d2ce62d1da",
+        "android_client_info": {
+          "package_name": "com.secretdevbd.xian.pigeoninfinityapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "372549357871-a2jsgt02slus7ghgq3g1jd7r65on21ag.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.secretdevbd.xian.pigeoninfinityapp",
+            "certificate_hash": "4f827842fce0b383e84115bdd37e125ee937aafd"
+          }
+        },
+        {
+          "client_id": "372549357871-r7racedvrhjjq5p7u9a30n4io57rab9m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCA7n0n_d3m6yCMKbJbrG-E7Vfw6EttOs0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "372549357871-r7racedvrhjjq5p7u9a30n4io57rab9m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

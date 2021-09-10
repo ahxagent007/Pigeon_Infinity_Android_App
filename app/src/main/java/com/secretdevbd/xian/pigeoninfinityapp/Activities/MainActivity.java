@@ -1,4 +1,4 @@
-package com.secretdevbd.xian.pigeoninfinityapp;
+package com.secretdevbd.xian.pigeoninfinityapp.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +9,11 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.secretdevbd.xian.pigeoninfinityapp.Fragments.AuctionListFragment;
+import com.secretdevbd.xian.pigeoninfinityapp.Fragments.HomeFragment;
+import com.secretdevbd.xian.pigeoninfinityapp.R;
+import com.secretdevbd.xian.pigeoninfinityapp.Fragments.piCareFragment;
+import com.secretdevbd.xian.pigeoninfinityapp.Fragments.profileFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener{
 

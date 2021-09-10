@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.LoginActivity"
+    android:background="#000000">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginTop="30dp">
+
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:src="@drawable/main_logo"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Please Enter Your Mobile Number"
+                android:layout_margin="20dp"
+                android:textSize="20dp"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:fontFamily="monospace"
+                android:gravity="center"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_margin="20dp"
+                android:background="#E8E8E8">
+
+                <EditText
+                    android:id="@+id/ET_countryCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="20dp"
+                    android:hint="+88"
+                    android:text="+88"
+                    android:background="#E8E8E8"
+                    android:padding="10dp"
+                    android:textColor="#000000"/>
+
+                <EditText
+                    android:id="@+id/ET_mobileNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#E8E8E8"
+                    android:gravity="center"
+                    android:hint="01 - - - - - - - -"
+                    android:inputType="number"
+                    android:minWidth="200dp"
+                    android:padding="10dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#636363"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Login"/>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

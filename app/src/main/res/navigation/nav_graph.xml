@@ -7,22 +7,22 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.secretdevbd.xian.pigeoninfinityapp.HomeFragment"
+        android:name="com.secretdevbd.xian.pigeoninfinityapp.Fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/auctionListFragment"
-        android:name="com.secretdevbd.xian.pigeoninfinityapp.AuctionListFragment"
+        android:name="com.secretdevbd.xian.pigeoninfinityapp.Fragments.AuctionListFragment"
         android:label="fragment_auction_list"
         tools:layout="@layout/fragment_auction_list" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.secretdevbd.xian.pigeoninfinityapp.profileFragment"
+        android:name="com.secretdevbd.xian.pigeoninfinityapp.Fragments.profileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/piCareFragment"
-        android:name="com.secretdevbd.xian.pigeoninfinityapp.piCareFragment"
+        android:name="com.secretdevbd.xian.pigeoninfinityapp.Fragments.piCareFragment"
         android:label="fragment_pi_care"
         tools:layout="@layout/fragment_pi_care" />
 </navigation>
