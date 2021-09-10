@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.secretdevbd.xian.pigeoninfinityapp.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/auctionListFragment"
+        android:name="com.secretdevbd.xian.pigeoninfinityapp.AuctionListFragment"
+        android:label="fragment_auction_list"
+        tools:layout="@layout/fragment_auction_list" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.secretdevbd.xian.pigeoninfinityapp.profileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/piCareFragment"
+        android:name="com.secretdevbd.xian.pigeoninfinityapp.piCareFragment"
+        android:label="fragment_pi_care"
+        tools:layout="@layout/fragment_pi_care" />
+</navigation>
