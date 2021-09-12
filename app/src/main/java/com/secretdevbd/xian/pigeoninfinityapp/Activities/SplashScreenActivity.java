@@ -19,9 +19,11 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-         SP = new SharedPreferenceClass(this);
-        delayLoad();
+        SP = new SharedPreferenceClass(this);
+        //delayLoad();
 
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        finish();
     }
 
     private void delayLoad(){
