@@ -7,15 +7,15 @@ public class AuctionEvent {
     String AuctionName;
     String AuctionDetails;
     int TotalPigeon;
-    Date AuctionStart;
-    Date AuctionEnd;
+    String AuctionStart;
+    String AuctionEnd;
     String MainPicture;
     String Currency;
 
     public AuctionEvent() {
     }
 
-    public AuctionEvent(int auctionID, String auctionName, String auctionDetails, int totalPigeon, Date auctionStart, Date auctionEnd, String mainPicture, String currency) {
+    public AuctionEvent(int auctionID, String auctionName, String auctionDetails, int totalPigeon, String auctionStart, String auctionEnd, String mainPicture, String currency) {
         AuctionID = auctionID;
         AuctionName = auctionName;
         AuctionDetails = auctionDetails;
@@ -58,19 +58,19 @@ public class AuctionEvent {
         TotalPigeon = totalPigeon;
     }
 
-    public Date getAuctionStart() {
+    public String getAuctionStart() {
         return AuctionStart;
     }
 
-    public void setAuctionStart(Date auctionStart) {
+    public void setAuctionStart(String auctionStart) {
         AuctionStart = auctionStart;
     }
 
-    public Date getAuctionEnd() {
+    public String getAuctionEnd() {
         return AuctionEnd;
     }
 
-    public void setAuctionEnd(Date auctionEnd) {
+    public void setAuctionEnd(String auctionEnd) {
         AuctionEnd = auctionEnd;
     }
 
