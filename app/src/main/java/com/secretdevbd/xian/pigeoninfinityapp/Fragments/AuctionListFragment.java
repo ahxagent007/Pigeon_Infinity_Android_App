@@ -1,6 +1,7 @@
 package com.secretdevbd.xian.pigeoninfinityapp.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.secretdevbd.xian.pigeoninfinityapp.Activities.SingleAuctionActivity;
 import com.secretdevbd.xian.pigeoninfinityapp.ItemClickListener;
 import com.secretdevbd.xian.pigeoninfinityapp.Models.AuctionEvent;
 import com.secretdevbd.xian.pigeoninfinityapp.Models.AuctionObject;
@@ -171,23 +173,6 @@ public class AuctionListFragment extends Fragment {
                     RV_pastAuction.setAdapter(mRecycleAdapter_past_auc);
                 }
 
-
-                //sort via boosted or not here
-                /*ArrayList<PigeonPostDB> pigeonPostDBS = new ArrayList<PigeonPostDB>();
-
-                Collections.reverse(boostedPigeonPostDBS);
-                Collections.reverse(normalPigeonPostDBS);
-
-                pigeonPostDBS.addAll(boostedPigeonPostDBS);
-                pigeonPostDBS.addAll(normalPigeonPostDBS);
-
-                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
-                RV_buy.setLayoutManager(mLayoutManager);
-
-                RecyclerView.Adapter mRecycleAdapter = new RecycleViewAdapterForPigeonPost(getApplicationContext(), pigeonPostDBS);
-                RV_buy.setAdapter(mRecycleAdapter);
-
-                PB_loadingBuy.setVisibility(View.INVISIBLE);*/
             }
 
             @Override
@@ -241,20 +226,14 @@ public class AuctionListFragment extends Fragment {
                 @Override
                 public void onClick(View view, final int position, boolean isLongClick) {
 
-                    /*viewHolder.IV_productPic.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            ShowPicture(productList.get(position).getProductPicture());
-                        }
-                    });*/
-
                     if (isLongClick) {
                         //Toast.makeText(context, "#" + position + " (Long click)", Toast.LENGTH_SHORT).show();
                         //showPopupMenu(view,position);
 
                     } else {
-                        //Toast.makeText(context, "#" + position + " Not Long Click", Toast.LENGTH_SHORT).show();
-
+                        Intent at = new Intent(getContext(), SingleAuctionActivity.class);
+                        at.putExtra("AUCTION_ID", auctionEvents.get(position).getAuctionID());
+                        startActivity(at);
                     }
                 }
             });
