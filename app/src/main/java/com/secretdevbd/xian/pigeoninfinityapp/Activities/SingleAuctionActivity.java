@@ -8,11 +8,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -32,12 +35,19 @@ import com.secretdevbd.xian.pigeoninfinityapp.Models.AuctionObject;
 import com.secretdevbd.xian.pigeoninfinityapp.Models.Pigeon;
 import com.secretdevbd.xian.pigeoninfinityapp.R;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import com.secretdevbd.xian.pigeoninfinityapp.Functions.TimeSettings;
 
 public class SingleAuctionActivity extends AppCompatActivity {
 
     String TAG = "XIAN";
+
+    private static String AUCTION_RUNNING = "RUNNING";
+    private static String AUCTION_UPCOMING = "UPCOMING";
+    private static String AUCTION_PAST = "PAST";
+    private static String AUCTION_LOADING = "LOADING";
 
     DatabaseReference databaseRef;
     AuctionObject auctionObject;
@@ -46,6 +56,12 @@ public class SingleAuctionActivity extends AppCompatActivity {
     TextView TV_timer;
 
     ProgressBar PB_loadingPigeons;
+
+    TimeSettings TS;
+    String AUCTION_STATE = AUCTION_LOADING;
+
+    ArrayList<Handler> handlers;
+    ArrayList<Runnable> runnables;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,22 +74,48 @@ public class SingleAuctionActivity extends AppCompatActivity {
         TV_timer = findViewById(R.id.TV_timer);
         PB_loadingPigeons = findViewById(R.id.PB_loadingPigeons);
 
+        handlers = new ArrayList<Handler>();
+        runnables = new ArrayList<Runnable>();
+
+        TS = new TimeSettings();
+
+        if(AUCTION_STATE.equalsIgnoreCase(AUCTION_LOADING)){
+            TV_timer.setText("LOADING DATA...");
+        }
+
         getSingleAuctionDataFromFirebase(auctionID);
 
     }
+
+    Date auctionEndTime;
+    Date auctionStartTime;
 
     private void getSingleAuctionDataFromFirebase(int auc_id){
 
         databaseRef = FirebaseDatabase.getInstance().getReference("Auction");
 
-        //limitToLast 500
         databaseRef.orderByKey().equalTo(""+auc_id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                handlers.clear();
+                runnables.clear();
+
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
                     AuctionObject ab = ds.getValue(AuctionObject.class);
                     auctionObject = ab;
+
+                    auctionEndTime = TS.convertStringDateToDate(auctionObject.getAuctionEvent().getAuctionEnd());
+                    auctionStartTime = TS.convertStringDateToDate(auctionObject.getAuctionEvent().getAuctionStart());
+                    Date currentTime = TS.getCurrentTime();
+
+                    if( currentTime.after(auctionStartTime) && currentTime.before(auctionEndTime)){
+                        AUCTION_STATE = AUCTION_RUNNING;
+                    }else if( currentTime.after(auctionEndTime)){
+                        AUCTION_STATE = AUCTION_PAST;
+                    }else if(currentTime.before(auctionStartTime) && currentTime.before(auctionEndTime)){
+                        AUCTION_STATE = AUCTION_UPCOMING;
+                    }
 
                     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
 
@@ -84,6 +126,14 @@ public class SingleAuctionActivity extends AppCompatActivity {
                 }
 
                 PB_loadingPigeons.setVisibility(View.GONE);
+
+                if(AUCTION_STATE.equalsIgnoreCase(AUCTION_RUNNING)){
+                    updateAuctionTimeEnd(auctionEndTime);
+                }else if (AUCTION_STATE.equalsIgnoreCase(AUCTION_UPCOMING)){
+                    updateAuctionTimeStart(auctionStartTime);
+                }else if(AUCTION_STATE.equalsIgnoreCase(AUCTION_PAST)){
+                    TV_timer.setVisibility(View.GONE);
+                }
 
             }
 
@@ -135,7 +185,17 @@ public class SingleAuctionActivity extends AppCompatActivity {
                     .diskCacheStrategy(DiskCacheStrategy.DATA)
                     .into(viewHolder.IV_pigeonPic);
 
-
+            if(AUCTION_STATE.equalsIgnoreCase(AUCTION_RUNNING)){
+                updatePigeons(viewHolder.TV_auctionEnd, TS.convertStringDateToDate(pigeonList.get(i).getEndTime()));
+            }if (AUCTION_STATE.equalsIgnoreCase(AUCTION_UPCOMING)){
+                viewHolder.TV_auctionEnd.setText("AUCTION HASN'T STARTED");
+                viewHolder.btn_bid.setVisibility(View.GONE);
+                viewHolder.TV_auctionEnd.setVisibility(View.GONE);
+            }if (AUCTION_STATE.equalsIgnoreCase(AUCTION_PAST)){
+                viewHolder.TV_auctionEnd.setText("AUCTION ENDED");
+                viewHolder.btn_bid.setVisibility(View.GONE);
+                viewHolder.TV_auctionEnd.setVisibility(View.GONE);
+            }
 
             viewHolder.setClickListener(new ItemClickListener() {
                 @Override
@@ -146,10 +206,10 @@ public class SingleAuctionActivity extends AppCompatActivity {
                         //showPopupMenu(view,position);
 
                     } else {
-                        /*Intent at = new Intent(context, SinglePigeonActivity.class);
+                        Intent at = new Intent(context, SinglePigeonActivity.class);
                         at.putExtra("AUCTION_ID", pigeonList.get(position).getAuctionID());
                         at.putExtra("PIGEON_ID", pigeonList.get(position).getPigeonID());
-                        startActivity(at);*/
+                        startActivity(at);
                     }
                 }
             });
@@ -201,4 +261,68 @@ public class SingleAuctionActivity extends AppCompatActivity {
         }
 
     }
+
+
+    private void updatePigeons(TextView textView, Date EndTime){
+        int index = handlers.size();
+
+        handlers.add(new Handler(Looper.getMainLooper()));
+        runnables.add(new Runnable() {
+            @Override
+            public void run() {
+                // Your Code
+                String endsIn = TS.getTimeDifferenceEnd(EndTime);
+
+                textView.setText(endsIn);
+                handlers.get(index).postDelayed(runnables.get(index), 1000);
+            }
+        });
+        handlers.get(index).postDelayed(runnables.get(index), 1000);
+    }
+
+    private void updateAuctionTimeEnd(Date EndTime){
+        int index = handlers.size();
+
+        handlers.add(new Handler(Looper.getMainLooper()));
+        runnables.add(new Runnable() {
+            @Override
+            public void run() {
+                // Your Code
+                String endsIn = TS.getTimeDifferenceEnd(EndTime);
+
+                TV_timer.setText(endsIn+" Remaining!!");
+                handlers.get(index).postDelayed(runnables.get(index), 1000);
+            }
+        });
+        handlers.get(index).postDelayed(runnables.get(index), 1000);
+    }
+
+    private void updateAuctionTimeStart(Date StartTime){
+        int index = handlers.size();
+
+        handlers.add(new Handler(Looper.getMainLooper()));
+        runnables.add(new Runnable() {
+            @Override
+            public void run() {
+                // Your Code
+                String startsIn = TS.getTimeDifferenceStart(StartTime);
+
+                TV_timer.setText("Starts in "+startsIn);
+                handlers.get(index).postDelayed(runnables.get(index), 1000);
+            }
+        });
+        handlers.get(index).postDelayed(runnables.get(index), 1000);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (handlers.size()>0){
+            for (int i=0; i<handlers.size(); i++){
+                handlers.get(i).removeCallbacks(runnables.get(i));
+            }
+
+        }
+    }
 }
+

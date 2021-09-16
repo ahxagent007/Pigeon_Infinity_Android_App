@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PigeonInfinityApp">
-        <activity android:name=".Activities.SingleAuctionActivity"></activity>
+        <activity android:name=".Activities.SinglePigeonActivity"></activity>
+        <activity android:name=".Activities.SingleAuctionActivity" />
         <activity android:name=".Activities.LoginSMSActivity" />
         <activity android:name=".Activities.LoginActivity" />
         <activity android:name=".Activities.SplashScreenActivity">
