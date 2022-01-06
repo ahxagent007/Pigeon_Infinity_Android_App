@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.secretdevbd.xian.pigeoninfinityapp.R;
 
 
@@ -96,5 +98,11 @@ public class HomeFragment extends Fragment {
 
 
         return view;
+    }
+
+    DatabaseReference databaseRef;
+
+    public void checkLoginStatus(){
+        databaseRef = FirebaseDatabase.getInstance().getReference("PI_User");
     }
 }

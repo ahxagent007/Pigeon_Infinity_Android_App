@@ -40,6 +40,7 @@ public class LoginSMSActivity extends AppCompatActivity {
     String mVerificationId;
     PhoneAuthProvider.ForceResendingToken mResendToken;
     String verificationCode;
+    String mobileNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,7 @@ public class LoginSMSActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        String mobileNumber = getIntent().getStringExtra("MOBILE_NUMBER");
+        mobileNumber = getIntent().getStringExtra("MOBILE_NUMBER");
 
         FirebasePhoneRegistration(mobileNumber);
 
@@ -156,6 +157,9 @@ public class LoginSMSActivity extends AppCompatActivity {
 
                             FirebaseUser user = task.getResult().getUser();
                             new SharedPreferenceClass(LoginSMSActivity.this).setLoginUserID(user.getUid());
+
+                            //Create new User
+                            createUserOnFirebase(user.getUid(), mobileNumber);
                             // Update UI
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             finish();
@@ -170,5 +174,9 @@ public class LoginSMSActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    public void createUserOnFirebase(String user_id, String mobileNumber){
+
     }
 }
