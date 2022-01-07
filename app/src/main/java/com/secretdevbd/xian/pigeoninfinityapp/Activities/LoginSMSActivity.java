@@ -23,7 +23,14 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.secretdevbd.xian.pigeoninfinityapp.Functions.SharedPreferenceClass;
+import com.secretdevbd.xian.pigeoninfinityapp.Models.AuctionObject;
+import com.secretdevbd.xian.pigeoninfinityapp.Models.PI_User;
 import com.secretdevbd.xian.pigeoninfinityapp.R;
 
 import java.util.concurrent.TimeUnit;
@@ -42,6 +49,8 @@ public class LoginSMSActivity extends AppCompatActivity {
     String verificationCode;
     String mobileNumber;
 
+    DatabaseReference databaseRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +59,8 @@ public class LoginSMSActivity extends AppCompatActivity {
         ET_Code = findViewById(R.id.ET_Code);
         btn_done = findViewById(R.id.btn_done);
         PB_loadingSMS = findViewById(R.id.PB_loadingSMS);
+
+        databaseRef = FirebaseDatabase.getInstance().getReference("PI_User");
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -158,11 +169,15 @@ public class LoginSMSActivity extends AppCompatActivity {
                             FirebaseUser user = task.getResult().getUser();
                             new SharedPreferenceClass(LoginSMSActivity.this).setLoginUserID(user.getUid());
 
-                            //Create new User
-                            createUserOnFirebase(user.getUid(), mobileNumber);
-                            // Update UI
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                            finish();
+                            if(ifUserAvailableFirebase(user.getUid())){
+
+                            }else{
+                                //Create new User
+                                createUserOnFirebase(user.getUid(), mobileNumber);
+                                // Update UI
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                finish();
+                            }
                         } else {
                             // Sign in failed, display a message and update the UI
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -176,7 +191,44 @@ public class LoginSMSActivity extends AppCompatActivity {
                 });
     }
 
+    public boolean ifWebUserAvailable(String mobileNumber){
+        //API call to check if user registered on the website
+        return false;
+    }
+
+    public boolean ifUserAvailableFirebase(String uid){
+        //Check if the user is existed on the firebase
+
+        final PI_User[] pi_user = new PI_User[1];
+
+        databaseRef.orderByKey().equalTo(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot ds : snapshot.getChildren()){
+                    pi_user[0] = ds.getValue(PI_User.class);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+        if(pi_user[0].getName() == null){
+            return false;
+        }else{
+            return true;
+        }
+
+    }
+
     public void createUserOnFirebase(String user_id, String mobileNumber){
+
+        PI_User pi_user = new PI_User();
+        pi_user.setFirebase_uid(user_id);
+        pi_user.setPhone(mobileNumber);
+
+        databaseRef.child(user_id).setValue(pi_user);
 
     }
 }
